@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/nowPlayingFragment">
+
+    <fragment
+        android:id="@+id/nowPlayingFragment"
+        android:name="com.rahul.moviedb.ui.fragments.nowplaying.NowPlayingFragment"
+        android:label="fragment_now_playing"
+        tools:layout="@layout/fragment_now_playing" />
+    <fragment
+        android:id="@+id/todo1Fragment"
+        android:name="com.rahul.moviedb.ui.fragments.todo1.Todo1Fragment"
+        android:label="fragment_now_playing_1"
+        tools:layout="@layout/fragment_todo_1" />
+    <fragment
+        android:id="@+id/todoFragment"
+        android:name="com.rahul.moviedb.ui.fragments.todo.TodoFragment"
+        android:label="fragment_todo"
+        tools:layout="@layout/fragment_todo" />
+</navigation>
