@@ -8,16 +8,25 @@
     <fragment
         android:id="@+id/nowPlayingFragment"
         android:name="com.rahul.moviedb.ui.fragments.nowplaying.NowPlayingFragment"
-        android:label="fragment_now_playing"
-        tools:layout="@layout/fragment_now_playing" />
+        android:label="Movies Now"
+        tools:layout="@layout/fragment_now_playing" >
+        <action
+            android:id="@+id/action_nowPlayingFragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
+    </fragment>
     <fragment
         android:id="@+id/todo1Fragment"
         android:name="com.rahul.moviedb.ui.fragments.todo1.Todo1Fragment"
-        android:label="fragment_now_playing_1"
+        android:label="Movies Now"
         tools:layout="@layout/fragment_todo_1" />
     <fragment
         android:id="@+id/todoFragment"
         android:name="com.rahul.moviedb.ui.fragments.todo.TodoFragment"
-        android:label="fragment_todo"
+        android:label="Movies Now"
         tools:layout="@layout/fragment_todo" />
+    <fragment
+        android:id="@+id/movieFragment"
+        android:name="com.rahul.moviedb.MovieFragment"
+        android:label="fragment_movie"
+        tools:layout="@layout/fragment_movie" />
 </navigation>
