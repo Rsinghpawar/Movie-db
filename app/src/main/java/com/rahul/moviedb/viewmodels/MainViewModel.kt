@@ -22,11 +22,11 @@ class MainViewModel @ViewModelInject constructor(
 ) : AndroidViewModel(application) {
 
     /** ROOM Database **/
-
+    val position : MutableLiveData<Int> = MutableLiveData()
 
     val readMovie: LiveData<List<MovieEntity>> = repository.local.readDatabase().asLiveData()
 
-    private fun insertRecipes(movieEntity: MovieEntity) =
+    private fun insertMovies(movieEntity: MovieEntity) =
         viewModelScope.launch(IO) {
             repository.local.insertMovie(movieEntity)
         }
@@ -36,19 +36,19 @@ class MainViewModel @ViewModelInject constructor(
     val movieResponse: MutableLiveData<NetworkResult<NowPlayingMovies>> = MutableLiveData()
 
     fun getMovies(page : Int) = viewModelScope.launch {
-        getMoviesSageCall(page)
+        getMoviesSafeCall(page)
     }
 
-    private suspend fun getMoviesSageCall(page: Int) {
+    private suspend fun getMoviesSafeCall(page: Int) {
         movieResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val response = repository.remote.getNowPlayingMovies(page)
-                movieResponse.value = handleFoodRecipeResponse(response)
-                val recipes = movieResponse.value!!.data
-//                if (recipes != null) {
-//                    offlineCacheRecipes(recipes)
-//                }
+                movieResponse.value = handleMoviesResponse(response)
+                val movies = movieResponse.value!!.data
+                if (movies != null) {
+                    offlineCacheMovies(movies)
+                }
             } catch (e: Exception) {
 
             }
@@ -57,18 +57,18 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-//    private fun offlineCacheRecipes(recipes: NowPlayingMovies?) {
-//        val recipesEntity = MovieEntity(recipes)
-//        insertRecipes(recipesEntity)
-//    }
+    private fun offlineCacheMovies(movies : NowPlayingMovies?) {
+        val movieEntity = MovieEntity(movies!!)
+        insertMovies(movieEntity)
+    }
 
-    private fun handleFoodRecipeResponse(response: Response<NowPlayingMovies>): NetworkResult<NowPlayingMovies>? {
+    private fun handleMoviesResponse(response: Response<NowPlayingMovies>): NetworkResult<NowPlayingMovies>? {
         return when {
             response.message().toString().contains("timeout") -> NetworkResult.Error("Timeout")
             response.body()!!.results.isNullOrEmpty() -> NetworkResult.Error("Movies not found.")
             response.isSuccessful -> {
-                val recipes = response.body()
-                NetworkResult.Success(recipes!!)
+                val movies = response.body()
+                NetworkResult.Success(movies!!)
             }
             else -> NetworkResult.Error(response.message())
         }

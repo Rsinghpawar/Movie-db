@@ -26,7 +26,11 @@
         tools:layout="@layout/fragment_todo" />
     <fragment
         android:id="@+id/movieFragment"
-        android:name="com.rahul.moviedb.MovieFragment"
-        android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie" />
+        android:name="com.rahul.moviedb.ui.fragments.movie.MovieFragment"
+        android:label="Movie"
+        tools:layout="@layout/fragment_movie" >
+        <argument
+            android:name="data"
+            app:argType="com.rahul.moviedb.models.movie.Result" />
+    </fragment>
 </navigation>

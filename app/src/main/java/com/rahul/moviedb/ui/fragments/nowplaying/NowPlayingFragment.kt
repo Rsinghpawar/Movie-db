@@ -9,53 +9,58 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.rahul.moviedb.R
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.rahul.moviedb.adapters.MoviesNowAdapter
 import com.rahul.moviedb.databinding.FragmentNowPlayingBinding
+import com.rahul.moviedb.databinding.ItemMovieBinding
+import com.rahul.moviedb.models.movie.Result
 import com.rahul.moviedb.utils.NetworkResult
 import com.rahul.moviedb.viewmodels.MainViewModel
-import com.rahul.moviedb.viewmodels.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
-class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
+class NowPlayingFragment : Fragment(), MoviesNowAdapter.OnClick {
 
-    private var _binding : FragmentNowPlayingBinding?=null
+
+    private var _binding: FragmentNowPlayingBinding? = null
     private val binding get() = _binding!!
-    private val mAdapter by lazy { MoviesNowAdapter() }
+    private val mAdapter by lazy { MoviesNowAdapter(this) }
     private val mainViewModel by viewModels<MainViewModel>()
-    private val recipesViewModel by viewModels<MovieViewModel>()
-
+    private var rvPosition: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNowPlayingBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
 
         setupRecyclerView()
-//        readDatabase()
-        requestApiData()
+        readDatabase()
+
         return binding.root
 
     }
 
-//    private fun readDatabase() {
-//        Log.d("TAG", "readDatabase: ")
-//        lifecycleScope.launch {
-//            mainViewModel.readMovie.observe(viewLifecycleOwner, { database ->
-//                if (database.isNotEmpty()) {
-//                    mAdapter.setData(database[0].foodRecipes)
-//                    hideShimmer()
-//                } else {
-//                    requestApiData()
-//                }
-//            })
-//        }
-//    }
+
+    private fun readDatabase() {
+        Log.d("TAG", "readDatabase: ")
+        lifecycleScope.launch {
+            mainViewModel.readMovie.observe(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty()) {
+                    mAdapter.setData(database[0].movies)
+                    hideShimmer()
+                } else {
+                    requestApiData()
+                }
+            })
+        }
+    }
 
 
     private fun requestApiData() {
@@ -72,7 +77,7 @@ class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
                 is NetworkResult.Loading -> showShimmer()
                 is NetworkResult.Error -> {
                     hideShimmer()
-//                    loadDataFromCache()
+                    loadDataFromCache()
                     Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -80,19 +85,32 @@ class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
         })
     }
 
-//    private fun loadDataFromCache() {
-//        lifecycleScope.launch {
-//            mainViewModel.readMovie.observe(viewLifecycleOwner, { database ->
-//                if (database.isNotEmpty()) {
-//                    mAdapter.setData(database[0].foodRecipes)
-//                }
-//            })
-//        }
-//    }
+    private fun loadDataFromCache() {
+        lifecycleScope.launch {
+            mainViewModel.readMovie.observe(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty()) {
+                    mAdapter.setData(database[0].movies)
+                }
+            })
+        }
+    }
 
 
     private fun setupRecyclerView() {
-        binding.recyclerView.adapter = mAdapter
+        mainViewModel.position.observe(viewLifecycleOwner, {
+           rvPosition = if (it == 0 ) it else it -1
+        })
+        binding.recyclerView.scrollToPosition(rvPosition)
+        binding.recyclerView.apply {
+            this.adapter = mAdapter
+            postponeEnterTransition()
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
+        }
+
+
         showShimmer()
     }
 
@@ -109,4 +127,20 @@ class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
         super.onDestroy()
         _binding = null
     }
+
+    override fun onItemClick(view: ItemMovieBinding, result: Result, position: Int) {
+        val direction = NowPlayingFragmentDirections.actionNowPlayingFragmentToMovieFragment(result)
+        val extras = FragmentNavigatorExtras(
+            view.recipeImageView to result.posterPath,
+            view.titleTextView to result.title,
+            view.descriptionTextView to result.releaseDate,
+            view.heartImageView to result.popularity.toString(),
+            view.adultImageView to result.genreIds.toString()
+        )
+        mainViewModel.position.value = position
+        findNavController().navigate(direction, extras)
+
+
+    }
+
 }

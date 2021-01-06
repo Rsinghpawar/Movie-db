@@ -1,94 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MovieFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="result"
+            type="com.rahul.moviedb.models.movie.Result" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.fragments.movie.MovieFragment">
 
-        <ImageView
-            android:id="@+id/img_movie"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_margin="10dp"
-            android:src="@color/mediumGray"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="32dp"
-            android:src="@drawable/ic_heart"
-            app:layout_constraintEnd_toStartOf="@+id/img_adult"
-            app:layout_constraintTop_toBottomOf="@+id/img_movie"
-            app:tint="@color/red" />
+            <ImageView
+                loadImageFromUrl="@{result.posterPath}"
+                android:id="@+id/img_movie"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_margin="10dp"
+                android:src="@color/mediumGray"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_likes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100"
-            android:textColor="@color/red"
-            app:layout_constraintLeft_toLeftOf="@+id/img_heart"
-            app:layout_constraintRight_toRightOf="@+id/img_heart"
-            app:layout_constraintTop_toBottomOf="@+id/img_heart" />
+            <ImageView
+                android:id="@+id/img_heart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="32dp"
+                android:src="@drawable/ic_heart"
+                app:layout_constraintEnd_toStartOf="@+id/img_adult"
+                app:layout_constraintTop_toBottomOf="@+id/img_movie"
+                app:tint="@color/red" />
 
-        <ImageView
-            android:id="@+id/img_adult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_adult"
-            app:layout_constraintEnd_toEndOf="@+id/img_movie"
-            app:layout_constraintTop_toBottomOf="@+id/img_movie"
-            app:tint="@color/mediumGray" />
+            <TextView
+                setNumberOfLikes="@{result.voteCount}"
+                android:id="@+id/txt_likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:textColor="@color/red"
+                app:layout_constraintLeft_toLeftOf="@+id/img_heart"
+                app:layout_constraintRight_toRightOf="@+id/img_heart"
+                app:layout_constraintTop_toBottomOf="@+id/img_heart" />
 
-        <TextView
-            android:id="@+id/txt_adult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ua"
-            android:textColor="@color/mediumGray"
-            app:layout_constraintLeft_toLeftOf="@+id/img_adult"
-            app:layout_constraintRight_toRightOf="@+id/img_adult"
-            app:layout_constraintTop_toBottomOf="@+id/img_adult" />
+            <ImageView
+                applyAdultColor="@{result.adult}"
+                android:id="@+id/img_adult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_adult"
+                app:layout_constraintEnd_toEndOf="@+id/img_movie"
+                app:layout_constraintTop_toBottomOf="@+id/img_movie"
+                app:tint="@color/mediumGray" />
 
-        <TextView
-            android:id="@+id/txt_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/courgette"
-            android:maxLines="2"
-            android:text="@string/app_name"
-            android:textColor="@color/darker"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/img_movie"
-            app:layout_constraintTop_toBottomOf="@+id/img_movie" />
+            <TextView
+                applyAdultColor="@{result.adult}"
+                android:id="@+id/txt_adult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ua"
+                android:textColor="@color/mediumGray"
+                app:layout_constraintLeft_toLeftOf="@+id/img_adult"
+                app:layout_constraintRight_toRightOf="@+id/img_adult"
+                app:layout_constraintTop_toBottomOf="@+id/img_adult" />
 
-        <TextView
-            android:id="@+id/txt_desc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/Explore_fragment"
-            android:textColor="@color/darkGray"
-            app:layout_constraintLeft_toLeftOf="@id/img_movie"
-            app:layout_constraintRight_toRightOf="@id/img_movie"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title" />
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/courgette"
+                android:maxLines="2"
+                android:text="@{result.title}"
+                android:textColor="@color/darker"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_likes"
+                app:layout_constraintStart_toStartOf="@+id/img_movie"
+                app:layout_constraintTop_toTopOf="@+id/img_heart" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/txt_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{result.overview}"
+                android:textColor="@color/darkGray"
+                app:layout_constraintLeft_toLeftOf="@id/img_movie"
+                app:layout_constraintRight_toRightOf="@id/img_movie"
+                app:layout_constraintTop_toBottomOf="@+id/txt_likes" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</layout>

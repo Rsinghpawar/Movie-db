@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="mainViewModel"
             type="com.rahul.moviedb.viewmodels.MainViewModel" />
@@ -16,57 +17,55 @@
         tools:context=".ui.fragments.recipe.RecipesFragment">
 
         <com.todkars.shimmer.ShimmerRecyclerView
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
-            app:shimmer_recycler_item_count="4"
-            app:shimmer_recycler_layout="@layout/placeholder_recipe_shimmer"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
+            app:layout_constraintVertical_bias="0.0"
+            app:shimmer_recycler_item_count="4"
+            app:shimmer_recycler_layout="@layout/placeholder_movie_shimmer" />
 
 
         <ImageView
-            android:visibility="invisible"
             android:id="@+id/img_error"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:alpha="0.5"
-
             android:src="@drawable/ic_dissatisfied"
+            readApiResponse="@{mainViewModel.movieResponse}"
+            readDatabase="@{mainViewModel.readMovie}"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.26999998" />
 
-<!--        readApiResponse="@{mainViewModel.movieResponse}"-->
-        <!--        readDatabase="@{mainViewModel.readMovie}"-->
+
 
         <TextView
-
-            android:visibility="invisible"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:alpha="0.5"
             android:id="@+id/txt_error"
+            readApiResponse2="@{mainViewModel.movieResponse}"
+            readDatabase2="@{mainViewModel.readMovie}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:alpha="0.5"
             android:text="No Internet Connection"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/img_error"
             app:layout_constraintStart_toStartOf="@+id/img_error"
             app:layout_constraintTop_toBottomOf="@+id/img_error" />
-<!--        readApiResponse2="@{mainViewModel.movieResponse}"-->
-<!--        readDatabase2="@{mainViewModel.readMovie}"-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
